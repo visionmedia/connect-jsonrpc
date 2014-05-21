@@ -9,18 +9,32 @@
 
 The _jsonrpc_ middleware provides JSON-RPC 2.0 support. Below is an example exposing the _add_ and _sub_ methods:
 
-	  var math = {
-	      add: function(a, b, fn){
-	          fn(null, a + b);
+	var math = {
+	      add: function(a, b){
+              var callback = arguments[arguments.length-1];
+                  
+	          if (typeof a == "number" && typeof b == "number") {
+	              callback(null, a+b);
+	          } else {
+                  callback(new Error("Expecting 2 numbers!"));
+	          }
 	      },
-	      sub: function(a, b, fn){
-	          fn(null, a - b);
+	      sub: function(a, b){
+	          var callback = arguments[arguments.length-1];
+                  
+	          if (typeof a == "number" && typeof b == "number") {
+	              callback(null, a-b);
+	          } else {
+                  callback(new Error("Expecting 2 numbers!"));
+	          }
 	      }
 	  };
     
 	  var date = {
-	      time: function(fn){
-	          fn(null, new Date().toUTCString());
+	      time: function(){
+	          var callback = arguments[arguments.length-1];
+                  
+	          callback(null, new Date().toUTCString());
 	      }
 	  };
     
